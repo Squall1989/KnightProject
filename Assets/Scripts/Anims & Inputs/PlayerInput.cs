@@ -41,6 +41,11 @@ namespace KnightProject
             {
                 movementBehaviour.Move(MoveState.stand);
             }
+
+            if(Input.GetAxis("Jump") > 0)
+            {
+                movementBehaviour.Jump();
+            }
         }
 
 

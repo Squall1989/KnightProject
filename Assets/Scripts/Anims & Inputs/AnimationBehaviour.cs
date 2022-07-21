@@ -24,10 +24,11 @@ namespace KnightProject
             switch(moveState)
             {
                 case MoveState.jump:
-                    animatorController.SetTrigger(AnimStates.Jump);
+                    animatorController.SetBool(AnimStates.Jump, true);
                     animatorController.SetBool(AnimStates.Move, false);
                     break;
                 case MoveState.stand:
+                    animatorController.SetBool(AnimStates.Jump, false);
                     animatorController.SetBool(AnimStates.Move, false);
                     break;
 
