@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,7 +13,9 @@ namespace KnightProject
         {
             base.SetInitiables();
 
-            playerInput.Init(FindBehaviourOfType(typeof(MovementBehaviour)) as MovementBehaviour);
+            var moveBehaviour = FindBehaviourOfType(typeof( MovementBehaviour));
+
+            playerInput.Init((MovementBehaviour)moveBehaviour);
         }
     }
 }

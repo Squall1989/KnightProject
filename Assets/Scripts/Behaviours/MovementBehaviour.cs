@@ -9,8 +9,11 @@ namespace KnightProject
     {
         [SerializeField]
         protected float speed;
+        [SerializeField]
+        protected SpriteRenderer spriteRenderer;
 
         protected MoveState moveState;
+        protected bool isOnGround;
 
         public Action<MoveState> OnMoveStateChange;
 
@@ -20,7 +23,7 @@ namespace KnightProject
 
         }
 
-        // -1 -> left; +1 -> right; 0 - stand
+        // -1 -> left; +1 -> right; 0 -> stand
         internal void Move(MoveState direction)
         {
             if (isDead)
@@ -40,8 +43,18 @@ namespace KnightProject
             {
                 OnMoveStateChange?.Invoke(newState);
                 moveState = newState;
+
+                if (newState == MoveState.moveLeft)
+                    spriteRenderer.flipX = true;
+                else if (newState == MoveState.moveRight)
+                    spriteRenderer.flipX = false;
+
             }
         }
 
+        internal virtual void Jump()
+        {
+
+        }
     }
 }

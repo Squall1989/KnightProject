@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 /// <summary>
 /// Base for moveable and attackable units
@@ -20,6 +21,7 @@ namespace KnightProject
             SetKillables();
             // Auto init 
             SetInitiables(1);
+            SetInitiables(2);
             // Manual init
             SetInitiables();
         }
@@ -40,38 +42,37 @@ namespace KnightProject
 
         protected virtual void SetInitiables(int numOfArguments)
         {
-            foreach (BaseBehaviour behaviour in unitBehaviours)
+            foreach (var behaviour in unitBehaviours)
             {
                 // Get initiable interface of behaviour
-                Type initInterface = behaviour.GetType().GetInterface("Initiable`" + numOfArguments);
+                Type initiating = behaviour.GetType().GetInterface("Initiable`" + numOfArguments);
 
-                if (initInterface == null)
+                if (initiating == null)
                     continue;
 
+                List<object> argList = new List<object>(numOfArguments);
+
                 // Get initiable interface argument type
-                foreach(var argument in initInterface.GetGenericArguments())
+                foreach(var argument in initiating.GetGenericArguments())
                 {
-                    initBehaviour(argument);
-                }
-                // Init behaviour with this type
-                void initBehaviour(Type argument)
-                {
-                    BaseBehaviour initiable = FindBehaviourOfType(argument);
+                    var initiable = FindBehaviourOfType(argument);
 
                     if (initiable != null)
-                    {
-                        (initInterface as Initiable<BaseBehaviour>).Init(initiable);
-                    }
+                        argList.Add(initiable);
                 }
+
+                initiating.GetMethod("Init").Invoke(behaviour, argList.ToArray()); ;
+
             }
         }
 
 
-        protected BaseBehaviour FindBehaviourOfType(Type type)
+        protected UnityEngine. Object FindBehaviourOfType<T>(T type) where T: Type
         {
-            foreach(BaseBehaviour behaviour in unitBehaviours)
+
+            foreach(var behaviour in unitBehaviours)
             {
-                if(behaviour.GetType() == type)
+                if (behaviour.GetType() == type)
                 {
                     return behaviour;
                 }    
