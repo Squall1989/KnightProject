@@ -6,6 +6,7 @@ namespace KnightProject
 {
     public class PlayerMovementBehaviour : MovementBehaviour
     {
+
         internal override void Jump()
         {
             if (!JumpPossible())
@@ -14,12 +15,13 @@ namespace KnightProject
             base.Jump();
         }
 
-        private void OnTriggerEnter(Collider collider)
+        void OnTriggerEnter2D(Collider2D collider)
         {
             CheckGround(collider.transform, true);
         }
 
-        private void OnTriggerExit(Collider collider)
+
+        void OnTriggerExit2D(Collider2D collider)
         {
             CheckGround(collider.transform, false);
 
@@ -30,7 +32,7 @@ namespace KnightProject
             if (groundTR.tag == "ground")
             {
                 // Ground 
-                if (groundTR.position.y < transform.position.y)
+                if (transform.InverseTransformPoint( groundTR.position).y < 0)
                     IsOnGround = isEnter;
             }
         }

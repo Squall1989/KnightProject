@@ -8,12 +8,16 @@ namespace KnightProject
     public class MovementBehaviour : BaseBehaviour
     {
         [SerializeField]
+        protected bool isControllJump;
+        [SerializeField]
         protected float speed;
         [SerializeField]
         protected float jumpHeight, jumpSpeed;
         [SerializeField]
         protected SpriteRenderer spriteRenderer;
 
+
+        protected Coroutine jumpCoroutine;
         protected MoveState moveState;
         public bool IsOnGround
         {
@@ -23,6 +27,8 @@ namespace KnightProject
                 Debug.Log("isOnGround: " + value);
                 isOnGround = value;
 
+                if (jumpCoroutine == null)
+                    jumpCoroutine = StartCoroutine(JumpCorout(false));
             }
         }
 
@@ -38,9 +44,10 @@ namespace KnightProject
         // -1 -> left; +1 -> right; 0 -> stand
         internal void Move(MoveState direction)
         {
-            if (isDead || !IsOnGround)
+            if (isDead)
                 return;
-
+            if (!IsOnGround && !isControllJump)
+                return;
             // Left or right direction
             Vector3 moveDirect = Vector3.right * (int)direction;
             transform.position += moveDirect * Time.deltaTime * speed;
@@ -53,7 +60,9 @@ namespace KnightProject
         {
             if(newState != moveState)
             {
-                OnMoveStateChange?.Invoke(newState);
+                if(IsOnGround)
+                    OnMoveStateChange?.Invoke(newState);
+
                 moveState = newState;
 
                 if (newState == MoveState.moveLeft)
@@ -66,23 +75,28 @@ namespace KnightProject
 
         internal virtual void Jump()
         {
-            IsOnGround = false;
-            StartCoroutine(JumpCorout());
+            if (jumpCoroutine != null)
+                return;
+
+            jumpCoroutine = StartCoroutine(JumpCorout(true));
         }
 
-        protected IEnumerator JumpCorout()
+        protected IEnumerator JumpCorout(bool up)
         {
             OnMoveStateChange?.Invoke(MoveState.jump);
 
 
             float startPosY = transform.position.y;
             // Jump
-            yield return MoveUP(1, () => transform.position.y < startPosY + jumpHeight);
+            if(up)
+                yield return MoveUP(1, () => transform.position.y >= startPosY + jumpHeight);
+
             // Fall
             yield return MoveUP(-1, () => IsOnGround);
 
             OnMoveStateChange?.Invoke(MoveState.stand);
 
+            jumpCoroutine = null;
         }
 
         protected IEnumerator MoveUP(int direct, Func<bool> exitPredicat)

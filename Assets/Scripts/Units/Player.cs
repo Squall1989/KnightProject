@@ -17,5 +17,6 @@ namespace KnightProject
 
             playerInput.Init((MovementBehaviour)moveBehaviour);
         }
+
     }
 }

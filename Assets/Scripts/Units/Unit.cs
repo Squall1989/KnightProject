@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 /// <summary>
@@ -60,19 +61,20 @@ namespace KnightProject
                     if (initiable != null)
                         argList.Add(initiable);
                 }
-
-                initiating.GetMethod("Init").Invoke(behaviour, argList.ToArray()); ;
+                if(argList.Count == numOfArguments)
+                    initiating.GetMethod("Init").Invoke(behaviour, argList.ToArray()); ;
 
             }
         }
 
 
-        protected UnityEngine. Object FindBehaviourOfType<T>(T type) where T: Type
+        protected UnityEngine.Object FindBehaviourOfType<T>(T type) where T: Type
         {
 
             foreach(var behaviour in unitBehaviours)
             {
-                if (behaviour.GetType() == type)
+                Type behType = behaviour.GetType();
+                if(behType == type || behType.IsSubclassOf(type))
                 {
                     return behaviour;
                 }    
