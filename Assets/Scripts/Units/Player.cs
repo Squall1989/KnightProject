@@ -13,9 +13,9 @@ namespace KnightProject
         {
             base.SetInitiables();
 
-            var moveBehaviour = FindBehaviourOfType(typeof( MovementBehaviour));
+            var moveBehaviour = FindBehaviourOfType(typeof(PlayerMovementBehaviour));
 
-            playerInput.Init((MovementBehaviour)moveBehaviour);
+            playerInput.Init((PlayerMovementBehaviour)moveBehaviour);
         }
 
     }

@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace KnightProject
 {
-    public class PlayerInput : MonoBehaviour, Initiable<MovementBehaviour>
+    public class PlayerInput : MonoBehaviour, Initiable<PlayerMovementBehaviour>
     {
-        private MovementBehaviour movementBehaviour;
+        private PlayerMovementBehaviour movementBehaviour;
 
 
-        public void Init(MovementBehaviour initType)
+        public void Init(PlayerMovementBehaviour initType)
         {
             movementBehaviour = initType;
         }

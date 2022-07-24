@@ -5,4 +5,9 @@ namespace KnightProject
     {
         void Init(T initType);
     }
+
+    public interface Initiable<T, U>
+    {
+        void Init(T initT, U initU);
+    }
 }

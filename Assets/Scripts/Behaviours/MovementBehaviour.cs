@@ -15,20 +15,18 @@ namespace KnightProject
         protected float jumpHeight, jumpSpeed;
         [SerializeField]
         protected SpriteRenderer spriteRenderer;
+        // When unit hide from camera
+        protected Action OnScreenEndAction;
 
-
-        protected Coroutine jumpCoroutine;
+        protected CapsuleCollider2D capsuleCollider;
         protected MoveState moveState;
-        public bool IsOnGround
+
+        public virtual bool IsOnGround
         {
             get => isOnGround;
             protected set
             {
-                Debug.Log("isOnGround: " + value);
                 isOnGround = value;
-
-                if (jumpCoroutine == null)
-                    jumpCoroutine = StartCoroutine(JumpCorout(false));
             }
         }
 
@@ -36,9 +34,9 @@ namespace KnightProject
         private bool isOnGround = true;
 
         // Start is called before the first frame update
-        protected void Start()
+        protected virtual void Start()
         {
-
+            capsuleCollider = GetComponent<CapsuleCollider2D>();
         }
 
         // -1 -> left; +1 -> right; 0 -> stand
@@ -50,9 +48,24 @@ namespace KnightProject
                 return;
             // Left or right direction
             Vector3 moveDirect = Vector3.right * (int)direction;
-            transform.position += moveDirect * Time.deltaTime * speed;
+
+            CheckMoveEnd(moveDirect * Time.deltaTime * speed);
 
             CheckMoveState(direction);
+        }
+
+        protected void CheckMoveEnd(Vector3 nextPos)
+        {
+
+            Vector3 screenPoint = Camera.main.WorldToViewportPoint(transform.position + nextPos);
+            if (screenPoint.x < 0 || screenPoint.x > 1)
+            {
+                OnScreenEndAction?.Invoke();
+            }
+            else
+            {
+                transform.position += nextPos;
+            }
         }
 
         // Compare current and new movement states and tell others
@@ -71,38 +84,13 @@ namespace KnightProject
                     spriteRenderer.flipX = false;
 
             }
+
         }
 
-        internal virtual void Jump()
+
+
+        protected IEnumerator MoveUP(float direct, Func<bool> exitPredicat)
         {
-            if (jumpCoroutine != null)
-                return;
-
-            jumpCoroutine = StartCoroutine(JumpCorout(true));
-        }
-
-        protected IEnumerator JumpCorout(bool up)
-        {
-            OnMoveStateChange?.Invoke(MoveState.jump);
-
-
-            float startPosY = transform.position.y;
-            // Jump
-            if(up)
-                yield return MoveUP(1, () => transform.position.y >= startPosY + jumpHeight);
-
-            // Fall
-            yield return MoveUP(-1, () => IsOnGround);
-
-            OnMoveStateChange?.Invoke(MoveState.stand);
-
-            jumpCoroutine = null;
-        }
-
-        protected IEnumerator MoveUP(int direct, Func<bool> exitPredicat)
-        {
-            Debug.Log("MoveUP: " + direct);
-
             while (!exitPredicat.Invoke())
             {
                 Vector3 directVect = Vector3.up * direct * jumpSpeed;

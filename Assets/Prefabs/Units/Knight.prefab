@@ -151,7 +151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isControllJump: 1
   speed: 5
-  jumpHeight: 3
+  jumpHeight: 2.5
   jumpSpeed: 5
   spriteRenderer: {fileID: 2951011284793787758}
 --- !u!114 &6347616914503417447
