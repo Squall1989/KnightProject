@@ -16,6 +16,7 @@ namespace KnightProject
         {
             moveDirection = move;
             this.movementBehaviour = movementBehaviour;
+            StartAction();
         }
 
         public override void StartAction()

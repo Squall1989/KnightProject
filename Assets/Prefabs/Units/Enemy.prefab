@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 2951011284793787664}
   - component: {fileID: 2951011284793787758}
   - component: {fileID: 5924790420609599795}
-  - component: {fileID: 2951011284793787756}
   - component: {fileID: 8534261827439834997}
+  - component: {fileID: 1386850739825166785}
   - component: {fileID: 6347616914503417447}
   - component: {fileID: 5391663422434714266}
   - component: {fileID: 752136828913001002}
@@ -124,18 +124,7 @@ MonoBehaviour:
   - {fileID: 6347616914503417447}
   - {fileID: 5391663422434714266}
   - {fileID: 8534261827439834997}
---- !u!114 &2951011284793787756
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2951011284793787667}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 790fdd6029f2d459f8dbe7eec83b54e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  - {fileID: 1386850739825166785}
 --- !u!114 &8534261827439834997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,8 +140,20 @@ MonoBehaviour:
   isControllJump: 0
   speed: 5
   jumpHeight: 0
-  jumpSpeed: 0
+  jumpSpeed: 5
   spriteRenderer: {fileID: 2951011284793787758}
+--- !u!114 &1386850739825166785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2951011284793787667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dcf15f647b93450f9b5ab6148440ce7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6347616914503417447
 MonoBehaviour:
   m_ObjectHideFlags: 0

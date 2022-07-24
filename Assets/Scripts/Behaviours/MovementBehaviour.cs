@@ -20,6 +20,8 @@ namespace KnightProject
 
         protected CapsuleCollider2D capsuleCollider;
         protected MoveState moveState;
+        protected Coroutine jumpCoroutine;
+
 
         public virtual bool IsOnGround
         {
@@ -31,12 +33,16 @@ namespace KnightProject
         }
 
         public Action<MoveState> OnMoveStateChange;
-        private bool isOnGround = true;
+        private bool isOnGround = false;
 
         // Start is called before the first frame update
         protected virtual void Start()
         {
             capsuleCollider = GetComponent<CapsuleCollider2D>();
+            if(IsOnGround == false)
+            {
+                StartCoroutine(JumpCorout(false));
+            }
         }
 
         // -1 -> left; +1 -> right; 0 -> stand
@@ -87,7 +93,25 @@ namespace KnightProject
 
         }
 
+        protected IEnumerator JumpCorout(bool up)
+        {
+            OnMoveStateChange?.Invoke(MoveState.jump);
 
+
+            float startPosY = transform.position.y;
+            // Jump
+            if (up)
+            {
+                yield return MoveUP(1.5f, () => transform.position.y >= startPosY + jumpHeight);
+                IsOnGround = false;
+            }
+            // Fall
+            yield return MoveUP(-1f, () => IsOnGround);
+
+            OnMoveStateChange?.Invoke(moveState);
+
+            jumpCoroutine = null;
+        }
 
         protected IEnumerator MoveUP(float direct, Func<bool> exitPredicat)
         {
@@ -96,6 +120,34 @@ namespace KnightProject
                 Vector3 directVect = Vector3.up * direct * jumpSpeed;
                 transform.position += directVect * Time.deltaTime;
                 yield return null;
+            }
+        }
+
+        protected void OnTriggerEnter2D(Collider2D collider)
+        {
+            CheckGround((BoxCollider2D)collider, true);
+        }
+
+
+        protected void OnTriggerExit2D(Collider2D collider)
+        {
+            CheckGround((BoxCollider2D)collider, false);
+
+        }
+
+        private void CheckGround(BoxCollider2D groundCollider, bool isEnter)
+        {
+            if (groundCollider.tag == "ground")
+            {
+                Vector3 inverseVector = transform.InverseTransformPoint(groundCollider.transform.position);
+
+                float colloderPoint = Mathf.Abs(inverseVector.y) - groundCollider.size.y;
+
+                bool standGround = colloderPoint < 0;
+
+                // Ground 
+                if (standGround)
+                    IsOnGround = isEnter;
             }
         }
     }

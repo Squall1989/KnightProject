@@ -59,6 +59,7 @@ namespace KnightProject
             Vector3 instPoint = Camera.main.ViewportToWorldPoint(new Vector3(x, heightInst));
 
             Enemy enemy = EnemyPool.Instance.GetFromPool();
+            enemy.gameObject.SetActive(true);
             enemy.transform.position = instPoint;
         }
     }

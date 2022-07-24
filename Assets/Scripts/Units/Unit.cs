@@ -17,7 +17,7 @@ namespace KnightProject
 
         private List<IKillable> killables = new List<IKillable>();
 
-        protected virtual void Start()
+        protected virtual void Awake()
         {
             SetKillables();
             // Auto init 

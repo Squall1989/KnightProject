@@ -6,9 +6,10 @@ namespace KnightProject
 {
     public class EnemyActionBehaviour : ActionBehaviour
     {
-        protected void OnEnable()
+        private void OnEnable()
         {
             StartMove();
+
         }
 
         private void StartMove()

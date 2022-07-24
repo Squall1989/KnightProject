@@ -2970,12 +2970,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5977552867771242024, guid: 2fadfbb4cbf014e2390d9e3ef73868c7,
-        type: 3}
-      propertyPath: enemyPfb
-      value: 
-      objectReference: {fileID: 5924790420609599795, guid: adf160c219256412ea11ed0816ebb1b3,
-        type: 3}
     - target: {fileID: 5977552868361905666, guid: 2fadfbb4cbf014e2390d9e3ef73868c7,
         type: 3}
       propertyPath: m_LocalPosition.x
